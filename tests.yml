@@ -1,0 +1,43 @@
+# EXO 5
+# name: Tests unitaires
+
+# on:
+#   push:
+#     branches: [ main ]
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Installer les dépendances
+#         run: npm install
+#       - name: Exécuter les tests
+#         run: npm test
+
+
+# Exo 6
+
+name: Tests unitaires
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Installer les dépendances
+        run: npm install
+      - name: Exécuter les tests
+        run: npm test
+
+  second_job:
+    needs: test 
+    runs-on: ubuntu-latest
+    if: ${{ success() }} 
+
+    steps:
+      - run: echo "Second job running"
