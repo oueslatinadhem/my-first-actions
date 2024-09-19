@@ -1,0 +1,34 @@
+name: Tests et couverture de code
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Installer les dépendances
+        run: npm install
+
+      - name: Formater le code avec Prettier
+        uses: prettier/prettier-action@v4
+        with:
+          prettier_options: --write **/*.js # Formate tous les fichiers .js
+
+      - name: Exécuter les tests avec couverture
+        run: npm test -- --coverage 
+
+      - name: Upload coverage to Codecov  
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} 
+          directory: ./coverage 
+
+  second_job:
+    needs: test 
+    runs-on: ubuntu-latest
+    if: ${{ success() }} 
+
+    steps:
+      - run: echo "Second job running"
