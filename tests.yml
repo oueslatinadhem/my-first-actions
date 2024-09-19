@@ -1,43 +1,43 @@
-# EXO 5
 # name: Tests unitaires
 
-# on:
-#   push:
-#     branches: [ main ]
+# on: [push]
 
 # jobs:
-#   build:
+#   test:
 #     runs-on: ubuntu-latest
 
 #     steps:
 #       - uses: actions/checkout@v3
 #       - name: Installer les dépendances
 #         run: npm install
-#       - name: Exécuter les tests
-#         run: npm test
+#       - name: Exécuter les tests avec couverture
+#         run: npm test -- --coverage 
+#       - name: Upload coverage to Codecov  
+#         uses: codecov/codecov-action@v3
+#         with:
+#         token: ${{ secrets.CODECOV_TOKEN }} 
+#         directory: ./coverage
+
+#   second_job:
+#     needs: test 
+#     runs-on: ubuntu-latest
+#     if: ${{ success() }} 
+
+#     steps:
+#       - run: echo "Second job running"
 
 
-# Exo 6
-
-name: Tests unitaires
+name: Déploiement sur GitHub Pages
 
 on: [push]
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
-      - name: Installer les dépendances
-        run: npm install
-      - name: Exécuter les tests
-        run: npm test
-
-  second_job:
-    needs: test 
-    runs-on: ubuntu-latest
-    if: ${{ success() }} 
-
-    steps:
-      - run: echo "Second job running"
+      - name: Déployer sur GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
